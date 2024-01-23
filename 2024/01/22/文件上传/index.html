@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#3367D6"/>
+  <link rel="apple-touch-icon" href="/icons-192.png">
+  <link rel="manifest" href="/manifest.json">
+  
+  <meta name="generator" content="Hexo 6.3.0">
+
+  
+    <meta name="description" content="a new ctfer">
+  
+
+  
+
+  
+    <meta name="author" content="ATRI">
+  
+
+  
+
+  
+
+  <title>web文件上传 | ATRI&#39;blog</title>
+
+  
+
+  
+    <link rel="shortcut icon" href="/Adminie/MyPythonWork/favicon.ico">
+  
+
+  <!--mathjax latex数学公式显示支持-->
+  
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@1.1.13/index.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/monokai.min.css">
+  
+
+  
+
+  
+<link rel="stylesheet" href="/Adminie/MyPythonWork/css/style.css">
+
+</head>
+<body>
+  <div class="root-container">
+    
+<!-- header container -->
+<header class="header-container post">
+  
+    <div class="post-image" style="background-image: url(https://qiniu.sukoshi.xyz/src/images/68686407_p0.jpg)"></div>
+  
+
+  <!-- navbar -->
+<nav class="navbar">
+  <div class="navbar-content">
+    <!-- logo -->
+    <div class="navbar-logo">
+      <a href="/Adminie/MyPythonWork/">
+        
+          ATRI&#39;blog
+        
+      </a>
+    </div>
+    <!-- link -->
+    <div class="navbar-link">
+      <div class="navbar-btn">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul class="navbar-list">
+        
+          <li class="navbar-list-item"><a href="/Adminie/MyPythonWork/">首页</a></li>
+        
+          <li class="navbar-list-item"><a href="/Adminie/MyPythonWork/links">友链</a></li>
+        
+          <li class="navbar-list-item"><a href="/Adminie/MyPythonWork/about">关于</a></li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+    <div class="header-content">
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap">web文件上传</h1>
+          <h2 class="title-sub-wrap">
+            <strong>ATRI</strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2024-01-21T16:08:45.000Z" itemprop="datePublished">2024-01-22</time>
+          </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+</ul>
+          <ul class="wrap-list dark">
+  
+</ul>
+        </div>
+      </div>
+    </div>
+  
+
+  
+  
+  
+</header>
+
+    <!-- 文章 -->
+
+<!-- 文章内容 -->
+<div class="body-container">
+  <article class="content-container layout-block post-container">
+    <div class="article-info">
+      
+      
+      
+      
+      <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
+        <h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1.介绍"></a>1.介绍</h2><p>文件上传漏洞是指由于程序员在对用户文件上传部分的控制不足或者处理缺陷，而导致的用户可以越过其本身权限向服务器上上传可执行的动态脚本文件。这里上传的文件可以是木马，病毒，恶意脚本或者WebShell等。这种攻击方式是最为直接和有效的，“文件上传”本身没有问题，有问题的是文件上传后，服务器怎么处理、解释文件。如果服务器的处理逻辑做的不够安全，则会导致严重的后果。</p>
+<p>文件上传漏洞本身就是一个危害巨大的漏洞，WebShell更是将这种漏洞的利用无限扩大。<strong>大多数的上传漏洞被利用后攻击者都会留下WebShell以方便后续进入系统。</strong>攻击者在受影响系统放置或者插入WebShell后，可通过该WebShell更轻松，更隐蔽的在服务中为所欲为。</p>
+<p>简单的来说就是服务器没有对用户上传的内容进行<strong>严格的过滤</strong>或是使用<strong>方法错误</strong>导致用户可以让他们上传的文件产生<strong>你所不期望</strong>的用途。</p>
+<h3 id="触发点"><a href="#触发点" class="headerlink" title="触发点"></a>触发点</h3><p>存在文件上传功能的地方都有可能存在文件上传漏洞，比如<strong>相册</strong>、<strong>头像上传</strong>，视频、照片分享。论坛发帖和邮箱等可以<strong>上传附件</strong>的地方也是上传漏阔的高危地带，另外像文件管理器这样的功能也有可能被攻击者所利用。</p>
+<h2 id="2-检测及其绕过"><a href="#2-检测及其绕过" class="headerlink" title="2.检测及其绕过"></a>2.检测及其绕过</h2><h3 id="前端检测"><a href="#前端检测" class="headerlink" title="前端检测"></a>前端检测</h3><p>主要依赖于JS代码，非常容易绕过。</p>
+<p>特点：一般弹窗提醒，速度快无延迟，若校验不通过则无网络请求，F12即可发现。</p>
+<p>以upload-labs第一关示范：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">checkFile</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> file = <span class="variable language_">document</span>.<span class="title function_">getElementsByName</span>(<span class="string">&#x27;upload_file&#x27;</span>)[<span class="number">0</span>].<span class="property">value</span>;</span><br><span class="line">    <span class="keyword">if</span> (file == <span class="literal">null</span> || file == <span class="string">&quot;&quot;</span>) &#123;</span><br><span class="line">        <span class="title function_">alert</span>(<span class="string">&quot;请选择要上传的文件!&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//定义允许上传的文件类型</span></span><br><span class="line">    <span class="keyword">var</span> allow_ext = <span class="string">&quot;.jpg|.png|.gif&quot;</span>;</span><br><span class="line">    <span class="comment">//提取上传文件的类型</span></span><br><span class="line">    <span class="keyword">var</span> ext_name = file.<span class="title function_">substring</span>(file.<span class="title function_">lastIndexOf</span>(<span class="string">&quot;.&quot;</span>));</span><br><span class="line">    <span class="comment">//判断上传文件类型是否允许上传</span></span><br><span class="line">    <span class="keyword">if</span> (allow_ext.<span class="title function_">indexOf</span>(ext_name) == -<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> errMsg = <span class="string">&quot;该文件不允许上传，请上传&quot;</span> + allow_ext + <span class="string">&quot;类型的文件,当前文件类型为：&quot;</span> + ext_name;</span><br><span class="line">        <span class="title function_">alert</span>(errMsg);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>绕过方法很多，举几个最简单的：</p>
+<ol>
+<li><p>先将文件名改为白名单中的后缀以通过本地校验，再使用BP抓包，将文件名修改回原来的即可；</p>
+</li>
+<li><p>直接F12–&gt;设置–&gt;禁用JS即可。</p>
+</li>
+<li><p>直接删除代码中检测验证文件的部分即可。</p>
+<blockquote>
+<p><img src="https://niko-1319318245.cos.ap-nanjing.myqcloud.com/Markdown/image-20231106194924562.png" alt="image-20231106194924562"></p>
+<p>注意这里的提交事件：</p>
+<p><img src="https://niko-1319318245.cos.ap-nanjing.myqcloud.com/Markdown/image-20231106195051473.png" alt="image-20231106195051473"></p>
+</blockquote>
+</li>
+</ol>
+<h3 id="后端检测"><a href="#后端检测" class="headerlink" title="后端检测"></a>后端检测</h3><h4 id="黑名单"><a href="#黑名单" class="headerlink" title="黑名单"></a>黑名单</h4><p>服务器上一般都会有一个blacklist文件，里面包含了常见的危险脚本文件。</p>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-7584176/7e17d1931b29c55316f201803324090b.png" alt="img"></p>
+<h4 id="白名单"><a href="#白名单" class="headerlink" title="白名单"></a>白名单</h4><p>白名单只允许符合要求的文件上传，相比于黑名单可靠性更高。</p>
+<h3 id="绕过方法"><a href="#绕过方法" class="headerlink" title="绕过方法"></a>绕过方法</h3><h4 id="htaccess文件解析漏洞"><a href="#htaccess文件解析漏洞" class="headerlink" title=".htaccess文件解析漏洞"></a><code>.htaccess</code>文件解析漏洞</h4><blockquote>
+<p><code>.htaccess</code>是一个纯文本文件，它里面存放着Apache服务器配置相关的指令。<br><code>.htaccess</code>主要的作用有：URL重写、自定义错误页面、MIME类型配置以及访问权限控制等。主要体现在伪静态的应用、图片防盗链、自定义404错误页面、阻止&#x2F;允许特定IP&#x2F;IP段、目录浏览与主页、禁止访问指定文件类型、文件密码保护等。</p>
+</blockquote>
+<p>其中<code>.htaccess</code>文件内容：<code>x.jpg</code>的意思是设置当前目录下名为<code>x.jpg</code>的文件使用PHP解析，那么无论上传任何文件，只要符合PHP语言代码规范，就会被当做PHP执行。不符合规则则报错。</p>
+<p>具体格式如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">FilesMatch</span> &quot;<span class="attr">x.jpg</span>&quot;&gt;</span></span><br><span class="line">  SetHandler application/x-httpd-php</span><br><span class="line"><span class="tag">&lt;/<span class="name">FilesMatch</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>即<code>x.jpg</code>文件将被当做PHP代码执行，直接上传<strong>图片马</strong>即可。</p>
+<blockquote>
+<p>图片马：顾名思义就是将木马写在图片里。</p>
+<p>作用：可以同时绕过文件头检查和<code>getimagesize</code>函数检查。</p>
+<blockquote>
+<p>文件头检查</p>
+<p>原理：在每一个文件（包括图片，视频或其他的非ASCII文件）的开头（十六进制表示）实际上都有一片区域来显示这个文件的实际用法，这就是文件头标志。我们可以通过16进制编辑器打开文件，添加服务器允许的文件头以绕过检测。</p>
+<p>常见的文件头：</p>
+<p><strong>注意：下面的文件头的格式是<code>16进制</code>的格式：</strong></p>
+<p>GIF：<code>47 49 46 38 39 61</code> png：<code>89 50 4E 47 0D 0A 1A 0A</code> JPG：<code>FF D8 FF E0 00 10 4A 46 49 46</code></p>
+<p>在进行文件头绕过时，我们可以把上面的文件头添加到我们的一句话木马内容最前面，达到绕过文件头检测的目的。</p>
+</blockquote>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/php/php-getimagesize.html#:~:text=%E8%AF%AD%E6%B3%95%E6%A0%BC%E5%BC%8F%EF%BC%9A%20array%20getimagesize%20%28string%20%24filename%20%20%20array,%5D%29%20getimagesize%20%28%29%20%E5%87%BD%E6%95%B0%E5%B0%86%E6%B5%8B%E5%AE%9A%E4%BB%BB%E4%BD%95%20GIF%EF%BC%8CJPG%EF%BC%8CPNG%EF%BC%8CSWF%EF%BC%8CSWC%EF%BC%8CPSD%EF%BC%8CTIFF%EF%BC%8CBMP%EF%BC%8CIFF%EF%BC%8CJP2%EF%BC%8CJPX%EF%BC%8CJB2%EF%BC%8CJPC%EF%BC%8CXBM%20%E6%88%96%20WBMP%20%E5%9B%BE%E5%83%8F%E6%96%87%E4%BB%B6%E7%9A%84%E5%A4%A7%E5%B0%8F%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%9B%BE%E5%83%8F%E7%9A%84%E5%B0%BA%E5%AF%B8%E4%BB%A5%E5%8F%8A%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B%E5%8F%8A%E5%9B%BE%E7%89%87%E9%AB%98%E5%BA%A6%E4%B8%8E%E5%AE%BD%E5%BA%A6%E3%80%82"><code>getimagesize</code>函数</a></p>
+<p>用于获取图像大小及相关信息，成功返回一个数组，失败则返回 FALSE 并产生一条 E_WARNING 级的错误信息。</p>
+</blockquote>
+<p>制作：</p>
+<p>使用CMD进行制作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">copy a.png /b + a.php /a 3.php  </span><br><span class="line">/b:指定以二进制格式复制、合并文件，用于图像或者声音类文件</span><br><span class="line">/a:指定以ascii格式复制、合并文件用于txt等文本类文件</span><br></pre></td></tr></table></figure>
+
+<p>其中a.png就是提前准备好的正常图片，a.php为一句话木马，3.php是合成出来的文件</p>
+<p>拼接后效果如图：</p>
+<p><img src="https://niko-1319318245.cos.ap-nanjing.myqcloud.com/Markdown/image-20231107194331138.png" alt="image-20231107194331138"></p>
+<p>可以看到已经把一句话木马附在文件结尾。</p>
+<p>一般解析图片马需要结合<strong>解析漏洞</strong>或<strong>文件包含</strong>。</p>
+</blockquote>
+<h4 id="Apache解析漏洞"><a href="#Apache解析漏洞" class="headerlink" title="Apache解析漏洞"></a>Apache解析漏洞</h4><p>漏洞原理：</p>
+<p> <code>Apache</code> 解析文件的规则是从右到左开始判断解析，如果后缀名为不可识别文件解析，就再往左判断。比如<code>test.php.a.b</code>的“<code>.a</code>”和“<code>.b</code>”这两种后缀是<code>apache</code>不可识别解析，<code>apache</code>就会把<code>test.php.a.b</code>解析成<code>test.php</code>。</p>
+<p>影响版本：</p>
+<p> Apache 1.x  Apache 2.2.x</p>
+<h4 id="IIS6-0漏洞"><a href="#IIS6-0漏洞" class="headerlink" title="IIS6.0漏洞"></a>IIS6.0漏洞</h4><p><code>IIS6.0</code>解析漏洞分<code>两种</code>： </p>
+<ul>
+<li>目录解析： 以<code>xx.asp</code>命名的文件夹里的文件都将会被当成<code>ASP文件</code>执行。 </li>
+<li>文件解析： <code>xx.asp;.jpg</code> 像这种畸形文件名在<code>;</code>后面的直接被忽略，也就是说当成<code>xx.asp</code>文件执行。</li>
+</ul>
+<p> <code>IIS6.0</code> 默认的可执行文件除了<code>asp</code>还包含这三种 <code>.asa</code> <code>.cer</code> <code>.cdx</code>。</p>
+<h4 id="IIS7-0-IIS7-5-Nginx的解析漏洞"><a href="#IIS7-0-IIS7-5-Nginx的解析漏洞" class="headerlink" title="IIS7.0 | IIS7.5 | Nginx的解析漏洞"></a>IIS7.0 | IIS7.5 | Nginx的解析漏洞</h4><p> <code>Nginx</code>拿到文件路径（更专业的说法是<code>URI</code>）<code>/test.jpg/test.php</code>后，一看后缀是<code>.php</code>，便认为该文件是<code>php文件</code>，转交给<code>php</code>去处理。</p>
+<p><code>php</code>一看<code>/test.jpg/test.php</code>不存在，便删去最后的<code>/test.php</code>，又看<code>/test.jpg</code>存在，便把<code>/test.jpg</code>当成要执行的文件了，又因为后缀为<code>.jpg</code>，<code>php</code>认为这不是<code>php文件</code>，于是返回<code>Access denied</code>。   </p>
+<p>这其中涉及到<code>php</code>的一个选项：<code>cgi.fix_pathinfo</code>，该值默认为<code>1</code>，表示开启。开启这一选项<code>PHP</code>可以对文件路径进行<code>修理</code>。</p>
+<p>举个例子，当php遇到文件路径<code>/1.jpg/2.txt/3.php</code>时，若<code>/1.jpg/2.txt/3.php</code>不存在，则会去掉最后的<code>/3.php</code>，然后判断<code>/1.jpg/2.txt</code>是否存在，若存在，则把<code>/1.jpg/2.txt</code>当做文件<code>/1.jpg/2.txt/3.php</code>，若<code>/1.jpg/2.txt</code>仍不存在，则继续去掉<code>/2.txt</code>，以此类推。</p>
+<h4 id="截断上传"><a href="#截断上传" class="headerlink" title="截断上传"></a>截断上传</h4><p>原理：在C语言中，<em><strong>空字符</strong></em> 有一个特殊含义，代表字符串的拼接结束。</p>
+<p>条件：PHP版本小于5.3.4，PHP的<code>magic_quotes_gpc</code>为OFF状态。</p>
+<p>这里我们使用的是PHP，属于高级语言，其底层其实是靠C语言来实现的，也就是说空字符的字符串拼接结束功能在PHP中也能实现。</p>
+<p>但是我们在URL中不能直接使用<code>空</code>，这样会造成无法识别；我们通过查看 <em><strong>ASCII对照表</strong></em>，发现 <em><strong>ASCII对照表</strong></em> 第一个就是<code>空字符</code>，它对应的16进制是<code>00</code>，这里我们就可以用16进制的<code>00</code>来代替<code>空字符</code>，让它截断后面的内容。</p>
+<p>截断上传还有一个非常重要的作用：确保你能找到你上传的文件。</p>
+<p>考虑这种情况：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$tempFile</span> = <span class="variable">$_FILES</span>[<span class="string">&#x27;file&#x27;</span>][<span class="string">&#x27;tmp_name&#x27;</span>];</span><br><span class="line"><span class="variable">$targetPath</span> =<span class="string">&quot;upload/&quot;</span>.<span class="variable">$_REQUEST</span>[<span class="string">&#x27;jieduan&#x27;</span>].<span class="title function_ invoke__">rand</span>(<span class="number">10</span>,<span class="number">99</span>).<span class="title function_ invoke__">date</span>(<span class="string">&quot;YmdHis&quot;</span>).<span class="string">&quot;.&quot;</span>.<span class="variable">$file_ext</span>;</span><br></pre></td></tr></table></figure>
+
+<p>容易看到，服务端在用户上传文件之后为其分配了随机名称，这样的操作使得连接并执行恶意文件变得相当麻烦。所以在<code>$_REQUEST[&#39;jieduan&#39;]</code>这个可控点处使用00截断可以直接将文件以原名称保存到当前目录下。</p>
+<blockquote>
+<p>使用<code>%00</code>,<code>/00</code>,<code>0x00</code>效果相同</p>
+</blockquote>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/index.php?save_path=../upload/1.php%00.jpg</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h4><p>对<code>.php</code>进行大小写变形，例如：<code>.Php</code>,<code>.PHP</code></p>
+<p>原理：利用黑名单不完整；Windows系统对后缀大小写不敏感。</p>
+<h4 id="点，空格绕过"><a href="#点，空格绕过" class="headerlink" title="点，空格绕过"></a>点，空格绕过</h4><p>原理：利用了Windows对文件和文件名的限制，当将点或空格放在结尾的时候，就会触发操作系统的命名规范问题，所以在生成文件的时候，添加在结尾的点或空格就会被去除。</p>
+<blockquote>
+<p>Windows不允许用户创建后缀带有空格的文件，需要使用BP抓包手动修改。</p>
+</blockquote>
+<p>例如：<code>1.php.</code></p>
+<h4 id="非循环过滤"><a href="#非循环过滤" class="headerlink" title="非循环过滤"></a>非循环过滤</h4><p>即只对字符串进行一轮过滤，所有的删除替换只进行一次。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$deny_ext</span> = <span class="keyword">array</span>(<span class="string">&quot;......&quot;</span>);</span><br><span class="line">        <span class="variable">$file_name</span> = <span class="title function_ invoke__">trim</span>(<span class="variable">$_FILES</span>[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;name&#x27;</span>]);</span><br><span class="line">        <span class="variable">$file_name</span> = <span class="title function_ invoke__">str_ireplace</span>(<span class="variable">$deny_ext</span>,<span class="string">&quot;&quot;</span>, <span class="variable">$file_name</span>);</span><br><span class="line">        <span class="variable">$temp_file</span> = <span class="variable">$_FILES</span>[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;tmp_name&#x27;</span>];</span><br><span class="line">        <span class="variable">$img_path</span> = UPLOAD_PATH.<span class="string">&#x27;/&#x27;</span>.<span class="variable">$file_name</span>;        </span><br></pre></td></tr></table></figure>
+
+<p>其中<code>str_ireplace</code>从左至右进行匹配，不区分大小写替换，且只替换了一次，利用双写绕过检查</p>
+<p>文件名<code>shell.p.phphp</code></p>
+<p>被删除<code>.php</code>后变为<code>shell.php</code></p>
+<p>或者：<code>.php. .</code>，删除一个<code>.</code>和一个空格后成为<code>.php.</code>，同上。</p>
+<p>构造方法视情况而定。</p>
+<h4 id="MIME检测"><a href="#MIME检测" class="headerlink" title="MIME检测"></a>MIME检测</h4><p>1.什么是MIME：</p>
+<blockquote>
+<p> <code>MIME(Multipurpose Internet Mail Extensions)</code>多用途互联网邮件扩展类型。是设定某种扩展名的文件用一种应用程序来打开的方式类型，当该扩展名文件被访问的时候，浏览器会自动使用指定应用程序来打开。</p>
+</blockquote>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-7584176/606cffca411fa045859e67820aa4842f.png" alt="img"></p>
+<p>2.常见的MIME类型:</p>
+<ul>
+<li><code>text/plain</code> （纯文本）  </li>
+<li><code>text/html</code> （HTML文档） </li>
+<li><code>text/javascript</code> （js代码）  </li>
+<li><code>application/xhtml+xml</code> （XHTML文档） </li>
+<li><code>image/gif</code> （GIF图像）  </li>
+<li><code>image/jpeg</code> （JPEG图像） </li>
+<li><code>image/png</code> （PNG图像） </li>
+<li><code>video/mpeg</code> （MPEG动画） </li>
+<li><code>application/octet-stream</code> （二进制数据）</li>
+<li><code>application/pdf</code> （PDF文档）</li>
+</ul>
+<p>3.检测方式</p>
+<p>在文件上传过程中，服务端会针对我们的上传的文件生成一个数组，这个数组其中有一项就是这个文件的类型<code>file_type</code>；服务端对文件进行检测时，就是通过检测脚本中的黑白名单和这个数组中的<code>file_type</code>进行对比，如果符合要求就允许上传这个文件。</p>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-7584176/74653d61d4e0d763977bff469eb090ca.png" alt="img"></p>
+<p>4.绕过方式</p>
+<p>部分Web应用系统判定文件类型是通过<code>content-type字段</code>，可以通过抓包，将<code>content-type字段</code>改为常见的图片类型，如<code>image/gif</code>，从而绕过校验。</p>
+<p><img src="https://niko-1319318245.cos.ap-nanjing.myqcloud.com/Markdown/image-20231107204142720.png" alt="image-20231107204142720"></p>
+<h2 id="3-防御方式"><a href="#3-防御方式" class="headerlink" title="3.防御方式"></a>3.防御方式</h2><p>1、文件上传的目录设置为不可执行。只要web容器无法解析该目录下面的文件，即使攻击者上传了脚本文件，服务器本身也不会受到影响。</p>
+<p>2、判断文件类型。在判断文件类型时，可以结合使用MIME Type、后缀检查等方式。在文件类型检查中，强烈推荐白名单方式，黑名单的方式已经无数次被证明是不可靠的。此外，对于图片的处理，可以使用压缩函数或者resize函数，在处理图片的同时破坏图片中可能包含的HTML代码。</p>
+<p>3、使用随机数改写文件名和文件路径。文件上传如果要执行代码，则需要用户能够访问到这个文件。在某些环境中，用户能上传，但不能访问。如果应用了随机数改写了文件名和路径，将极大地增加攻击的成本。再来就是像shell.php.rar.rar和crossdomain.xml这种文件，都将因为重命名而无法攻击。</p>
+<p>4、单独设置文件服务器的域名。</p>
+<h2 id="4-作业"><a href="#4-作业" class="headerlink" title="4.作业"></a>4.作业</h2><p>Upload-labs Pass1-12</p>
+<p>配置教程如下：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_51075988/article/details/110277974">教程在这</a></p>
+
+      </section>
+
+      
+      
+        <nav class="article-nav">
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/Adminie/MyPythonWork/2024/01/19/hello-world/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">Hello World</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
+
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
+    </div>
+    <div class="widget-info">
+      <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-body">
+    
+      <img src="https://i0.imgs.ovh/2024/01/21/s1hzd.jpeg" class="soft-size--round soft-style--box" alt="ATRI">
+    
+    
+      <h2>ATRI</h2>
+    
+    
+      <p>梦只是另外一个现实，永远不要忘记</p>
+    
+
+    <div class="count-box">
+      <div class="count-box--item">
+        <svg class="icon icon-article" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M240.51564747 647.74217627h196.07203239c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806V165.10332731c0-33.18142087-30.16492806-60.32985613-60.32985612-60.32985611H245.04038668C225.43318342 104.7734712 210.35071939 119.85593522 210.35071939 139.46313845V617.57724821c0 16.59071043 13.57421762 30.16492806 30.16492808 30.16492806z m663.62841731-452.47392089v482.63884894c0 33.18142087-27.14843525 60.32985613-60.32985612 60.32985613H180.18579134c-33.18142087 0-60.32985613-27.14843525-60.32985612-60.32985613V195.26825538c-49.77213131 0-90.49478418 40.72265287-90.49478417 90.49478417v452.4739209c0 49.77213131 40.72265287 90.49478418 90.49478417 90.49478417h286.56681657c16.59071043 0 30.16492806 13.57421762 30.16492807 30.16492807s13.57421762 30.16492806 30.16492805 30.16492806h90.49478418c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806s13.57421762-30.16492806 30.16492807-30.16492807h286.56681657c49.77213131 0 90.49478418-40.72265287 90.49478417-90.49478417V285.76303955c0-49.77213131-40.72265287-90.49478418-90.49478417-90.49478417zM587.41232014 647.74217627h191.54729318c19.60720323 0 34.68966726-15.08246403 34.68966729-34.68966727V134.93839925c0-16.59071043-13.57421762-30.16492806-30.16492808-30.16492805H617.57724821c-30.16492806 0-60.32985613 27.14843525-60.32985612 60.32985611v452.4739209c0 16.59071043 13.57421762 30.16492806 30.16492805 30.16492806z" fill="currentColor"></path>
+</svg>
+        <span>2</span>
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+        0
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+        0
+      </div>
+    </div>
+  </div>
+</section>
+
+      
+
+      
+<section class="widet-notice widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-notice" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M512 945.02305225v28.15620663a24.27259221 24.27259221 0 0 1-24.27259221 24.27259335H394.0352a48.54518557 48.54518557 0 0 1-41.74885888-23.78714112l-110.68302222-184.47170332a132.04290333 132.04290333 0 0 1-17.47626667-48.54518557h118.4502511a200.97706667 200.97706667 0 0 1 76.21594113 14.56355556l20.38897777 133.49925888a48.54518557 48.54518557 0 0 0 36.40888888 27.67075555l16.01991111 2.91271112a24.27259221 24.27259221 0 0 1 20.38897778 25.72894889zM997.45185223 463.45481443a194.18074112 194.18074112 0 0 1-38.8361489 116.50844445 24.75804445 24.75804445 0 0 1-36.4088889 0l-34.95253333-34.95253333a24.27259221 24.27259221 0 0 1-2.91271111-30.58346667 97.09036999 97.09036999 0 0 0 0-106.79940665 24.27259221 24.27259221 0 0 1 2.91271111-30.58346666l34.95253333-34.95253334a24.75804445 24.75804445 0 0 1 18.93262223-7.28177777 26.2144 26.2144 0 0 1 17.47626667 9.70903665A194.18074112 194.18074112 0 0 1 997.45185223 463.45481443z m-194.18074112-388.36148111v776.72296335a48.54518557 48.54518557 0 0 1-48.54518556 48.54518443h-28.64165888a48.54518557 48.54518557 0 0 1-33.98163001-14.07810332l-145.63555556-143.20829668A291.27111111 291.27111111 0 0 0 342.57730333 657.63555556H172.18370333a145.63555556 145.63555556 0 0 1-145.63555556-145.63555556v-97.09036999a145.63555556 145.63555556 0 0 1 145.63555556-145.63555556h170.3936a291.27111111 291.27111111 0 0 0 206.31703779-85.43952668l145.63555555-143.20829554a48.54518557 48.54518557 0 0 1 33.98162888-14.07810446H754.72592555a48.54518557 48.54518557 0 0 1 48.54518556 48.54518555z" fill="currentColor"></path>
+</svg>
+    <span>NOTICE</span>
+  </div>
+  <div class="widget-body">
+    <p>flex-block主题部分重构，详情查看https://github.com/miiiku/flex-block，新人ctfer</p>
+  </div>
+</section>
+
+
+      <section class="widget-categorys widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+    <span>CATEGORYS</span>
+  </div>
+  <div class="widget-body">
+    <ul class="categorys-list">
+      
+    </ul>
+  </div>
+</section>
+
+      <section class="widget-tags widget-item  layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+    <span>TAGS</span>
+  </div>
+  <div class="widget-body">
+    <div class="tags-cloud">
+      
+    </div>
+  </div>
+</section>
+    </div>
+  </article>
+</div>
+
+    <!-- footer container -->
+<footer id="footer" class="footer">
+  <div class="footer-container">
+    
+    <div class="social-icons">
+      
+        
+      
+        
+      
+        
+      
+        
+          <a href="https://github.com/Adminie" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            <svg class="icon icon-github" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M64.6 512c0 195.6 125.4 361.9 300.1 422.9 23.5 5.9 19.9-10.8 19.9-22.2v-77.6c-135.8 15.9-141.3-74-150.5-89-18.5-31.5-61.9-39.5-49-54.5 31-15.9 62.5 4 98.9 58 26.4 39.1 77.9 32.5 104.1 26 5.7-23.5 17.9-44.5 34.7-60.9-140.7-25.2-199.4-111.1-199.4-213.3 0-49.5 16.4-95.1 48.4-131.8-20.4-60.6 1.9-112.4 4.9-120.1 58.2-5.2 118.5 41.6 123.3 45.3 33.1-8.9 70.8-13.7 112.9-13.7 42.4 0 80.3 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.4-43.9 2.9 7.7 24.7 58.3 5.5 118.1 32.5 36.8 49 82.8 49 132.4 0 102.3-59 188.3-200.2 213.2 23.5 23.3 38.1 55.5 38.1 91.1v112.7c0.8 9 0 17.9 15.1 17.9C832.7 877 960.4 709.4 960.4 512.1c0-247.5-200.6-447.9-447.9-447.9C265 64.1 64.6 264.5 64.6 512z"></path>
+</svg>
+          </a>
+        
+      
+        
+          <a href="https://twitter.com/guanquanhong" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            <svg class="icon icon-twitter" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M962.285714 233.142857q-38.285714 56-92.571429 95.428571 0.571429 8 0.571429 24 0 74.285714-21.714286 148.285714t-66 142-105.428571 120.285714-147.428571 83.428571-184.571429 31.142857q-154.857143 0-283.428571-82.857143 20 2.285714 44.571429 2.285714 128.571429 0 229.142857-78.857143-60-1.142857-107.428571-36.857143t-65.142857-91.142857q18.857143 2.857143 34.857143 2.857143 24.571429 0 48.571429-6.285714-64-13.142857-106-63.714286t-42-117.428571l0-2.285714q38.857143 21.714286 83.428571 23.428571-37.714286-25.142857-60-65.714286t-22.285714-88q0-50.285714 25.142857-93.142857 69.142857 85.142857 168.285714 136.285714t212.285714 56.857143q-4.571429-21.714286-4.571429-42.285714 0-76.571429 54-130.571429t130.571429-54q80 0 134.857143 58.285714 62.285714-12 117.142857-44.571429-21.142857 65.714286-81.142857 101.714286 53.142857-5.714286 106.285714-28.571429z"></path>
+</svg>
+          </a>
+        
+      
+    </div>
+     
+    <p>&copy; 2024 <a href="/" target="_blank">ATRI</a></p>
+
+    
+
+    <p>Powered by <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> Theme - <a href="https://github.com/miiiku/flex-block" target="_blank" rel="noopener noreferrer author">flex-block</a></p>
+
+    <p>
+      <a href="javascript:;" id="theme-light">🌞 浅色</a>
+      <a href="javascript:;" id="theme-dark">🌛 深色</a>
+      <a href="javascript:;" id="theme-auto">🤖️ 自动</a>
+    </p>
+  </div>
+</footer>
+  </div>
+
+  <div class="back-to-top-fixed soft-size--round soft-style--box">
+    <svg class="icon icon-back-to-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path d="M725.333333 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-213.333333-213.333333c-17.066667-17.066667-17.066667-42.666667 0-59.733333s42.666667-17.066667 59.733333 0l213.333333 213.333333c17.066667 17.066667 17.066667 42.666667 0 59.733333C746.666667 422.4 738.133333 426.666667 725.333333 426.666667z"></path>
+      <path d="M298.666667 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8-17.066667-17.066667-17.066667-42.666667 0-59.733333l213.333333-213.333333c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333l-213.333333 213.333333C320 422.4 311.466667 426.666667 298.666667 426.666667z"></path>
+      <path d="M512 896c-25.6 0-42.666667-17.066667-42.666667-42.666667L469.333333 170.666667c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 682.666667C554.666667 878.933333 537.6 896 512 896z"></path>
+    </svg>
+  </div>
+
+  
+  <!-- aplayer -->
+
+
+<!-- dplayer -->
+
+
+<!-- copy button  -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+<!-- https://clipboardjs.com/ -->
+
+
+<script type="text/javascript">
+	(function () {
+		function getCodeType (elem) {
+			const classs = Array.from(elem.classList.values());
+			if (classs && classs.length > 1) {
+				return classs[1];
+			}
+			return "plain";
+		}
+
+		window.addEventListener("DOMContentLoaded", () => {
+			const copyBtnClass = "copy-btn";
+			//  instantiate clipboardjs 
+			const clipboard = new ClipboardJS('.' + copyBtnClass);
+
+			clipboard.on('success', function (e) {
+				console.info('Action:', e.action);
+				console.info('Text:', e.text);
+				console.info('Trigger:', e.trigger);
+				if (e.trigger) {
+					e.trigger.classList.add("copied");
+					setTimeout(() => {
+						e.trigger.classList.remove("copied");
+					}, 3000);
+				}
+				e.clearSelection();
+			});
+
+			clipboard.on('error', function (e) {
+				console.error('Action:', e.action);
+				console.error('Trigger:', e.trigger);
+			});
+
+			document.querySelectorAll('figure.highlight').forEach((elem) => {
+				const codeContent = elem.querySelector("td.code");
+				const copyButton = document.createElement('button');
+				copyButton.setAttribute("class", copyBtnClass);
+				copyButton.setAttribute("title", "Copy Code");
+				copyButton.setAttribute("data-clipboard-text", codeContent.innerText);
+				elem.insertBefore(copyButton, elem.children[0]);
+			});
+		})
+	})();
+</script>
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+<script src="/Adminie/MyPythonWork/js/script.js"></script>
+
+
+  
+  <!-- 尾部用户自定义相关内容 -->
+<script src="/Adminie/MyPythonWork/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/Adminie/MyPythonWork/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+</html>
